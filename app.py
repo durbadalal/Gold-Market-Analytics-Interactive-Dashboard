@@ -3,18 +3,18 @@ import yfinance as yf
 import pandas as pd
 import plotly.graph_objects as go
 
-# ১. পেজ সেটআপ
+# 1. PAGE SETUP
 st.set_page_config(page_title="Gold Market Tracker(INR)", page_icon="🪙", layout="wide")
 
 st.title("🪙 Gold Market Analytics & Interactive Dashboard")
 st.markdown("Historical and Live Market Data Analysis of Gold Futures (GC=F) from Yahoo Finance, with International Gold Prices Converted and Displayed in Indian Rupees (INR)")
 
-# ২. সাইডবার ইনপুট
+# 2. SIDEBAR INPUT
 st.sidebar.header("User Filters")
 period = st.sidebar.selectbox("Select Time Period", ["1wk","1mo", "3mo", "6mo", "1y", "2y", "5y", "max"], index=3)
 interval = st.sidebar.selectbox("Interval", ["1d", "1wk", "1mo"], index=0)
 
-# 💡 ডাটা ফেচিং ফাংশন
+# 💡 DATA FETCHING FUNCTION
 @st.cache_data
 def get_gold_data_inr(p, i, rate=83.5, factor=1.0):
     gold = yf.Ticker("GC=F")
