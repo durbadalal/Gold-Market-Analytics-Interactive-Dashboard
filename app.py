@@ -20,19 +20,19 @@ def get_gold_data_inr(p, i, rate=83.5, factor=1.0):
     gold = yf.Ticker("GC=F")
     df = gold.history(period=p, interval=i)
     
-    # ১ ট্রয় আউন্স = ৩১.১০৩৪ গ্রাম। ১০ গ্রাম সোনার দাম (INR)-এ বের করার সঠিক কনভার্সন:
+    # 1 Troy ounce = 31.1034 grams. The correct conversion for calculating the price of 10 grams of gold in INR is:
     conversion_factor = (10 / 31.1034) * rate * factor
     
-    # ডলার থেকে টাকা তে রূপান্তর
+    # Dollar to Rupee Conversion
     for col in ['Open', 'High', 'Low', 'Close']:
         df[col] = df[col] * conversion_factor
         
     return df
 
-# ডলার রেট ৮৩.৫ ধরে ডাটা কল
+# Using an exchange rate of ₹83.5 per US dollar, call the data.
 df = get_gold_data_inr(period, interval, rate=83.5, factor=1.0)
 
-# ৩. কি-মেট্রিক্স (Key Metrics Card)
+# ৩.Key Metrics Card
 if not df.empty:
     latest_price = round(df['Close'].iloc[-1], 2)
     prev_price = round(df['Close'].iloc[-2], 2)
@@ -41,7 +41,7 @@ if not df.empty:
 
     col1, col2, col3 = st.columns(3)
     
-    # খেয়াল করুন: এখানে $ কেটে ₹ (Rupee Symbol) বসানো হয়েছে
+    # খNote: Here, the $ symbol has been replaced with the ₹ (Rupee) symbol.
     col1.metric(
         label="Latest Closing Price (INR / 10g)", 
         value=f"₹{latest_price:,.2f}", 
@@ -58,7 +58,7 @@ if not df.empty:
 
     st.markdown("---")
 
-    # ৪. ইন্টারঅ্যাক্টিভ ক্যান্ডেলস্টিক চার্ট (Plotly)
+    # ৪. Interactive Candlestick Chart(Plotly)
     st.subheader("📈 Candlestick Price Chart")
     fig = go.Figure(data=[go.Candlestick(
         x=df.index,
@@ -71,7 +71,7 @@ if not df.empty:
     fig.update_layout(xaxis_rangeslider_visible=False, template="plotly_white", height=500)
     st.plotly_chart(fig, use_container_width=True)
 
-    # ৫. মুভিং অ্যাভারেজ ও ডাটা টেবিল
+    # ৫. Moving Average and Data Table
     st.subheader("📊 Moving Averages & Raw Data")
     df['SMA_20'] = df['Close'].rolling(window=20).mean()
     
